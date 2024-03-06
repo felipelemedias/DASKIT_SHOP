@@ -8,6 +8,13 @@ package com.mycompany.main;
  *
  * @author fleme
  */
-public class ToppingDecorator implements Celular {
-    
+public class FaceIDDecorator extends CelularDecorator {
+    public FaceIDDecorator(Celular celular) {
+        super(celular);
+    }
+
+    @Override
+    public void faceID() {
+        System.out.println("Recurso FaceID adquirido.");
+    }
 }

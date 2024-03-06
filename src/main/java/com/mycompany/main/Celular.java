@@ -11,4 +11,5 @@ package com.mycompany.main;
 public interface Celular {
     public void fazLigacao();
     public void tiraFoto();
+    public void faceID(); //adicionar funcionalidade com decorator
 }

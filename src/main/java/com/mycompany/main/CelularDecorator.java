@@ -8,21 +8,25 @@ package com.mycompany.main;
  *
  * @author fleme
  */
-public class Galaxy8 implements Celular {
+public class CelularDecorator implements Celular {
+    private Celular celular;
+
+    public CelularDecorator(Celular celular) {
+        this.celular = celular;
+    }
 
     @Override
     public void fazLigacao() {
-        System.out.println("Galaxy8 fazendo ligação..");
+        celular.fazLigacao();
     }
 
     @Override
     public void tiraFoto() {
-        System.out.println("Galaxy8 tirando foto..");
+        celular.tiraFoto();
     }
-    
-     @Override
+
+    @Override
     public void faceID() {
-         System.out.println("Galaxy 8 não suporta faceID..");
+        celular.faceID();
     }
-    
 }

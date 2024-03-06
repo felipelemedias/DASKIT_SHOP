@@ -20,4 +20,9 @@ public class IphoneS implements Celular {
         System.out.println("IphoneS tirando foto..");
     }
     
+    @Override
+    public void faceID() {
+        System.out.println("IphoneS não suporta faceID..");
+    }
+    
 }

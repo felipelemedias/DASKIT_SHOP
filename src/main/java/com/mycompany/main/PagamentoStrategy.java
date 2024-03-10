@@ -8,14 +8,6 @@ package com.mycompany.main;
  *
  * @author fleme
  */
-public class Samsung implements FabricanteCelular {
-
-    @Override
-    public Celular constroiCelular(String modelo) {
-        if(modelo.equals("galaxy8")){
-            return new Galaxy8(6999.99);
-        }
-        return null;
-    }
-    
+public interface PagamentoStrategy {
+    public void pagar(double valor);
 }

@@ -29,4 +29,9 @@ public class CelularDecorator implements Celular {
     public void faceID() {
         celular.faceID();
     }
+    
+    @Override
+    public double getPreco() {
+        return celular.getPreco();
+    }
 }

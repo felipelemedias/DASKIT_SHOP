@@ -12,4 +12,5 @@ public interface Celular {
     public void fazLigacao();
     public void tiraFoto();
     public void faceID(); //adicionar funcionalidade com decorator
+    public double getPreco(); //adicionar método para obter o preço
 }

@@ -9,7 +9,12 @@ package com.mycompany.main;
  * @author fleme
  */
 public class IphoneS implements Celular {
+    private double preco;
 
+    public IphoneS(double preco) {
+        this.preco = preco;
+    }
+    
     @Override
     public void fazLigacao() {
         System.out.println("IphoneS fazendo ligação..");
@@ -23,6 +28,11 @@ public class IphoneS implements Celular {
     @Override
     public void faceID() {
         System.out.println("IphoneS não suporta faceID..");
+    }
+    
+    @Override
+    public double getPreco() {
+        return this.preco;
     }
     
 }

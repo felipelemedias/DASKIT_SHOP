@@ -13,7 +13,7 @@ public class Apple implements FabricanteCelular {
     @Override
     public Celular constroiCelular(String modelo){
         if(modelo.equals("iphones")){
-            return new IphoneS();
+            return new IphoneS(4999.99);
         }
         return null;
     }

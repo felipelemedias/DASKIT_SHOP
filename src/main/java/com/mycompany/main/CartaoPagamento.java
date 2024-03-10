@@ -8,14 +8,9 @@ package com.mycompany.main;
  *
  * @author fleme
  */
-public class Samsung implements FabricanteCelular {
-
+public class CartaoPagamento implements PagamentoStrategy {
     @Override
-    public Celular constroiCelular(String modelo) {
-        if(modelo.equals("galaxy8")){
-            return new Galaxy8(6999.99);
-        }
-        return null;
+    public void pagar(double valor) {
+        System.out.println("Pagando R$" + valor + " com cartão de crédito.");
     }
-    
 }

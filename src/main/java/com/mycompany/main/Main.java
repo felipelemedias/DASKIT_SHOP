@@ -17,32 +17,40 @@ public class Main {
 
         // utilizando o padrao Fabrica
         Celular iphones = apple.constroiCelular("iphones");
+        System.out.println("Preço do iPhoneS sem FaceID: R$" + iphones.getPreco());
         
         // Utilizando o padrão Decorator para adicionar o recurso FaceID ao iPhoneS
         Celular iphonesComFaceID = new FaceIDDecorator(iphones);
-        
-        System.out.println("ok iPhoneS de fábrica sem FaceID");
-        // utilizando o celular fabricado para implementar FaceID com decorator
-        iphonesComFaceID.tiraFoto();
-        iphonesComFaceID.fazLigacao();
-        iphonesComFaceID.faceID();
-        System.out.println("ok iPhoneS com FaceID");
+        System.out.println("Preço do iPhoneS com FaceID: R$" + iphonesComFaceID.getPreco());
 
         // utilizando o padrao Singleton
         FabricanteCelular samsung = FabricanteCelularSingleton.getInstance("samsung");
 
         // utilizando o padrao Fabrica
         Celular galaxy8 = samsung.constroiCelular("galaxy8");
+        System.out.println("Preço do Galaxy8 sem FaceID: R$" + galaxy8.getPreco());
 
         // Utilizando o padrão Decorator para adicionar o recurso FaceID ao Galaxy8
         Celular galaxy8ComFaceID = new FaceIDDecorator(galaxy8);
+        System.out.println("Preço do Galaxy8 com FaceID: R$" + galaxy8ComFaceID.getPreco());
         
-        System.out.println("ok Galaxy8 de fábrica sem FaceID");
-        // utilizando o celular fabricado para implementar FaceID com decorator
-        galaxy8ComFaceID.tiraFoto();
-        galaxy8ComFaceID.fazLigacao();
-        galaxy8ComFaceID.faceID();
-        System.out.println("ok Galaxy8 com FaceID");
+        // Criando um carrinho de compras com a estratégia de pagamento por cartão de crédito
+        CarrinhoDeCompras carrinho = new CarrinhoDeCompras(new CartaoPagamento());
         
+        // Adicionando os celulares ao carrinho
+        carrinho.adicionarCelular(iphonesComFaceID);
+        System.out.println("Adicionado iPhoneS com FaceID ao carrinho. Total agora é: R$" + carrinho.calcularTotal());
+        
+        carrinho.adicionarCelular(galaxy8ComFaceID);
+        System.out.println("Adicionado Galaxy8 com FaceID ao carrinho. Total agora é: R$" + carrinho.calcularTotal());
+        
+        // Pagando os itens no carrinho com a estratégia de pagamento definida
+        System.out.println("Total a pagar com cartão de crédito: R$" + carrinho.calcularTotal());
+        carrinho.pagar();
+        
+        // Mudando a estratégia de pagamento para PIX e pagando novamente
+        carrinho.setPagamentoStrategy(new PixPagamento());
+        System.out.println("Total a pagar com PIX (com desconto): R$" + carrinho.calcularTotal());
+        carrinho.pagar();
     }
 }

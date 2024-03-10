@@ -9,12 +9,21 @@ package com.mycompany.main;
  * @author fleme
  */
 public class FaceIDDecorator extends CelularDecorator {
+    private static final double CUSTO_EXTRA = 500.0;  // Custo extra para adicionar o FaceID
+
     public FaceIDDecorator(Celular celular) {
         super(celular);
     }
 
     @Override
     public void faceID() {
-        System.out.println("Recurso FaceID adquirido.");
+        super.faceID();
+        System.out.println("FaceID adquirido com sucesso(custo extra de R$500.00).");
+    }
+
+    @Override
+    public double getPreco() {
+        return super.getPreco() + CUSTO_EXTRA;
     }
 }
+

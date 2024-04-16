@@ -44,4 +44,8 @@ public class CarrinhoDeCompras {
     public void setPagamentoStrategy(PagamentoStrategy pagamentoStrategy) {
         this.pagamentoStrategy = pagamentoStrategy;
     }
+
+    PagamentoStrategy getPagamentoStrategy() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

@@ -9,6 +9,7 @@ package com.mycompany.main;
  * @author fleme
  */
 public class Cliente implements Observer {
+
     private String nome;
 
     public Cliente(String nome) {
@@ -19,5 +20,9 @@ public class Cliente implements Observer {
     public void update(String message) {
         System.out.println("Cliente " + nome + " recebeu a atualização: " + message);
     }
-}
 
+    public String getNome() {
+        return this.nome;  // Make sure this method is properly implemented.
+
+    }
+}

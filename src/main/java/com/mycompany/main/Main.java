@@ -11,83 +11,131 @@ import java.util.Scanner;
 
 public class Main {
 
+    private static Loja loja = new Loja();
+    private static Scanner scanner = new Scanner(System.in);
+
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        Loja loja = new Loja();
-        CarrinhoDeCompras carrinho = new CarrinhoDeCompras(new CartaoPagamento());
+        boolean running = true;
+        boolean lojaAberta = false;
 
-        // utilizando o padrao Singleton
-        FabricanteCelular apple = FabricanteCelularSingleton.getInstance("apple");
-        FabricanteCelular samsung = FabricanteCelularSingleton.getInstance("samsung");
-
-        // utilizando o padrao Fabrica
-        Celular iphones = apple.constroiCelular("iphones");
-        Celular galaxy8 = samsung.constroiCelular("galaxy8");
-
-        // Utilizando o padrão Decorator para adicionar o recurso FaceID aos celulares
-        Celular iphonesComFaceID = new FaceIDDecorator(iphones);
-        Celular galaxy8ComFaceID = new FaceIDDecorator(galaxy8);
-
-        // Abrindo a loja
-        loja.abrirLoja();
-
-        while (true) {
-            System.out.println("\n1. Cadastrar venda (cliente entrou na loja)");
-            System.out.println("2. Encerrar venda (cliente saiu da loja)");
-            System.out.println("3. Fechar loja");
+        while (running) {
+            System.out.println("\n--- Loja de Celulares ---");
+            System.out.println("1. Abrir Loja");
+            System.out.println("2. Comprar Celular");
+            System.out.println("3. Fechar Loja");
+            System.out.println("4. Sair");
             System.out.print("Escolha uma opção: ");
-            int opcao = scanner.nextInt();
+            int choice = scanner.nextInt();
+            scanner.nextLine();  // Consume newline left-over
 
-            switch (opcao) {
+            switch (choice) {
                 case 1:
-                    System.out.print("Digite o nome do cliente: ");
-                    String nomeCliente = scanner.next();
-                    loja.entrarCliente(nomeCliente);
-                    System.out.println("1. Comprar iPhoneS");
-                    System.out.println("2. Comprar iPhoneS com FaceID");
-                    System.out.println("3. Comprar Galaxy8");
-                    System.out.println("4. Comprar Galaxy8 com FaceID");
-                    System.out.print("Escolha uma opção: ");
-                    int opcaoCompra = scanner.nextInt();
-                    switch (opcaoCompra) {
-                        case 1:
-                            carrinho.adicionarCelular(iphones);
-                            break;
-                        case 2:
-                            carrinho.adicionarCelular(iphonesComFaceID);
-                            break;
-                        case 3:
-                            carrinho.adicionarCelular(galaxy8);
-                            break;
-                        case 4:
-                            carrinho.adicionarCelular(galaxy8ComFaceID);
-                            break;
-                    }
-                    System.out.println("Total no carrinho agora é: R$" + carrinho.calcularTotal());
-                    System.out.println("1. Pagar com cartão de crédito");
-                    System.out.println("2. Pagar com PIX");
-                    System.out.print("Escolha uma opção: ");
-                    int opcaoPagamento = scanner.nextInt();
-                    switch (opcaoPagamento) {
-                        case 1:
-                            carrinho.setPagamentoStrategy(new CartaoPagamento());
-                            break;
-                        case 2:
-                            carrinho.setPagamentoStrategy(new PixPagamento());
-                            break;
+                    if (!lojaAberta) {
+                        loja.abrirLoja();
+                        lojaAberta = true;
+                        System.out.println("A loja está aberta.");
+                    } else {
+                        System.out.println("A loja já está aberta.");
                     }
                     break;
                 case 2:
-                    System.out.print("Digite o nome do cliente: ");
-                    nomeCliente = scanner.next();
-                    loja.sairCliente(nomeCliente);
-                    System.out.println("Total a pagar: R$" + carrinho.calcularTotal());
-                    carrinho.pagar();
+                    if (lojaAberta) {
+                        realizarCompra();
+                    } else {
+                        System.out.println("A loja está fechada. Por favor, abra a loja primeiro.");
+                    }
                     break;
                 case 3:
-                    loja.fecharLoja();
-                    System.exit(0);
+                    if (lojaAberta) {
+                        loja.fecharLoja();
+                        lojaAberta = false;
+                    } else {
+                        System.out.println("A loja já está fechada.");
+                    }
+                    break;
+                case 4:
+                    if (lojaAberta) {
+                        loja.fecharLoja();
+                    }
+                    running = false;
+                    break;
+                default:
+                    System.out.println("Opção inválida. Por favor, tente novamente.");
             }
         }
+    }
+
+    private static void realizarCompra() {
+        System.out.println("Por favor, digite o nome do cliente:");
+        String nomeCliente = scanner.nextLine();
+        Cliente cliente = new Cliente(nomeCliente);
+        loja.registerObserver(cliente);
+        loja.entrarCliente(cliente.getNome());
+
+        boolean continuarCompras = true;
+        CarrinhoDeCompras carrinho = new CarrinhoDeCompras(new PixPagamento()); // Default to PIX for initial setup
+
+        while (continuarCompras) {
+            System.out.println("Escolha um fabricante ('apple' ou 'samsung'):");
+            String tipo = scanner.nextLine().toLowerCase();
+
+            if (!tipo.equals("apple") && !tipo.equals("samsung")) {
+                System.out.println("Fabricante inválido. Por favor, escolha 'apple' ou 'samsung'.");
+                continue;
+            }
+
+            FabricanteCelular fabricante = FabricanteCelularSingleton.getInstance(tipo);
+            String[] modelosDisponiveis;
+            if ("apple".equals(tipo)) {
+                modelosDisponiveis = new String[]{"iphones"};
+                System.out.println("Modelos disponíveis: iphones");
+            } else {
+                modelosDisponiveis = new String[]{"galaxy8"};
+                System.out.println("Modelos disponíveis: galaxy8");
+            }
+
+            System.out.println("Informe o modelo desejado:");
+            String modelo = scanner.nextLine().toLowerCase();
+            if (!java.util.Arrays.asList(modelosDisponiveis).contains(modelo)) {
+                System.out.println("Modelo não disponível para o fabricante selecionado.");
+                continue;
+            }
+
+            Celular celular = fabricante.constroiCelular(modelo);
+            if (celular == null) {
+                System.out.println("Erro ao construir o modelo. Por favor, tente novamente.");
+                continue;
+            }
+
+            System.out.println("Deseja adicionar FaceID por R$500.00? (sim/não)");
+            String resposta = scanner.nextLine().toLowerCase();
+
+            if ("sim".equals(resposta)) {
+                celular = new FaceIDDecorator(celular);
+            }
+
+            carrinho.adicionarCelular(celular);
+            loja.registrarVenda(modelo, celular.getPreco());
+            System.out.println("Produto adicionado ao carrinho.");
+
+            System.out.println("Deseja adicionar mais produtos? (sim/não)");
+            resposta = scanner.nextLine().toLowerCase();
+            if ("não".equals(resposta) || "no".equals(resposta) || "nao".equals(resposta)) {
+                continuarCompras = false;
+            }
+        }
+
+        System.out.println("Escolha a forma de pagamento ('pix' ou 'cartao'):");
+        String formaPagamento = scanner.nextLine().toLowerCase();
+        PagamentoStrategy pagamentoStrategy = "pix".equals(formaPagamento) ? new PixPagamento() : new CartaoPagamento();
+        carrinho.setPagamentoStrategy(pagamentoStrategy);
+
+        System.out.println("Finalizando a compra...");
+        carrinho.pagar();
+        System.out.println("Compra realizada com sucesso!");
+
+        loja.removeObserver(cliente);  // Remove observer after purchase
+        loja.sairCliente(cliente.getNome());
+
     }
 }
